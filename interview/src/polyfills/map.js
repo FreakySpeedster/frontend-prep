@@ -3,7 +3,7 @@
 // of the original array. It does not modify the original array but returns a transformed 
 // version based on the callback's return value for each element.
 
-Array.prototype.myMap = (callbackFn) => {
+Array.prototype.myMap = function (callbackFn) {
     if (typeof(callbackFn) !== 'function') {
         throw new Error ("Argument passed in is not a function");
     }

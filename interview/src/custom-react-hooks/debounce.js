@@ -6,7 +6,7 @@ const useDebounce = (inputValue, wait) => {
         let timer = setTimeout(() => {
             setDebouncedValue(inputValue);
         }, wait);
-        return () => clearTimeout(timer); 
+        return () => clearTimeout(timer);
     }, [inputValue, wait]);
     return debouncedValue;
 }

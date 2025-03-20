@@ -5,7 +5,7 @@
 // current index, and the original array.
 
 
-Array.prototype.myReduce = (callbackFn, initialValue) => {
+Array.prototype.myReduce = function (callbackFn, initialValue) {
     if (typeof(callbackFn) !== 'function') {
         throw new Error ("Argument passed in is not a function");
     }

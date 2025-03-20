@@ -4,7 +4,7 @@
 // array and includes elements for which the callback returns true, leaving the rest out.
 
 
-Array.prototype.myFilter = (callbackFn) => {
+Array.prototype.myFilter = function (callbackFn) {
     if (typeof(callbackFn) !== 'function') {
         throw new Error ("Argument passed in is not a function");
     }
