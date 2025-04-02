@@ -15,7 +15,7 @@ function myDebounce(callbackFn, wait) {
     return function(...args) {
         clearTimeout(timer);
         timer = setTimeout(() => {
-            callbackFn.apply(this, ...args)
+            callbackFn.apply(this, ...args);
         }, wait);
     }
 }

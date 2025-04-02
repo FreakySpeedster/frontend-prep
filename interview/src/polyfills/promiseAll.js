@@ -26,7 +26,6 @@ export default function myPromiseAll(promises) {
                     resolve(results);
                 }
             }).catch((error) => reject(error));
-            
         })
 
     })
