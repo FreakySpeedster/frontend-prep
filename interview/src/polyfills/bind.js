@@ -17,11 +17,11 @@
  * 
  * const user = { name: 'Indira' };
  * 
- * // Create a bound function with `user` as `this` and partially apply 'Wow daww'
- * const boundGreet = greet.myBind(user, 'Wow daww');
+ * // Create a bound function with `user` as `this` and partially apply 'H3LLOOO'
+ * const boundGreet = greet.myBind(user, 'H3LLOOO');
  * 
  * boundGreet(); 
- * // Output: "Hello Indira, Here's your message: Wow daww"
+ * // Output: "Hello Indira, Here's your message: H3LLOOO"
  */
 
 

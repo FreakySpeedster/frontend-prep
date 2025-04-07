@@ -9,11 +9,15 @@ import ShoppingCart from './real-world/shopping-cart/ShoppingCart';
 import { ToastProvider } from './real-world/toast-message/GlobalToastMessage/ToastContext';
 import { CartProvider } from './real-world/shopping-cart/CartContext';
 import { Toast } from './real-world/toast-message/GlobalToastMessage/Toast';
+import { ThemeManagerProvider } from './real-world/theme-manager/ThemeManager';
+import { MultiToastProvider } from './real-world/toast-message/GlobalToastMessage/MultiToastContext';
 
 function App() {
 
   return (
-    <ToastProvider>
+    <ThemeManagerProvider>
+      <MultiToastProvider>
+    {/* <ToastProvider> */}
     <CartProvider>
       <>
         {/* <FileExplorer /> */}
@@ -22,7 +26,9 @@ function App() {
         <Toast />
       </>
     </CartProvider>
-    </ToastProvider>
+    {/* </ToastProvider> */}
+    </MultiToastProvider>
+    </ThemeManagerProvider>
   )
 }
 

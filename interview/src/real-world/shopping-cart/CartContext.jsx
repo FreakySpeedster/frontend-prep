@@ -1,11 +1,13 @@
 import { createContext, useContext, useState } from 'react';
-import { useToast } from '../toast-message/GlobalToastMessage/ToastContext';
+// import { useToast } from '../toast-message/GlobalToastMessage/ToastContext';
+import { useMultiToast } from '../toast-message/GlobalToastMessage/MultiToastContext';
 
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
     const [cart, setCart] = useState([]);
-    const {triggerToast} = useToast();
+    // const {triggerToast} = useToast();
+    const {triggerToast} = useMultiToast();
 
     const addItem = (item) => {
         setCart((prev) => {

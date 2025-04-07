@@ -11,7 +11,7 @@ const useFetch = (url) => {
         }
         setLoading(true);
         const controller = new AbortController();  // Create a new AbortController
-        const { signal } = controller;             // Extract the signal
+        const { signal } = controller;         // Extract the signal
         fetch(url, {signal}).then((response) => {
             if (!response.ok) {
                 throw new Error('Something went wrong while fetching data');
