@@ -94,6 +94,31 @@ const TicketCard = React.memo(({ ticket, onAssign }) => {
 });
 ```
 
+## How useCallback and React.memo complement each other
+``` jsx
+const Parent = () => {
+  const [count, setCount] = useState(0);
+
+  // Memoize the callback
+  const handleClick = useCallback(() => {
+    console.log("clicked");
+  }, []);
+
+  return (
+    <div>
+      <Child onClick={handleClick} />
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+    </div>
+  );
+};
+
+const Child = React.memo(({ onClick }) => {
+  console.log("Child rendered");
+  return <button onClick={onClick}>Child Button</button>;
+});
+
+```
+
 ---
 
 Let me know if you'd like to add sections on performance profiling or compare with Redux, Zustand, or Context API.
