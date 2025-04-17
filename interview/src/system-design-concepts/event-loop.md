@@ -1,77 +1,104 @@
+# Sources to understand visually
+https://www.lydiahallie.com/blog/event-loop
+https://youtu.be/eiC58R16hb8
+https://www.jsv9000.app/
 
-# Overview before diving into Event loop
-# 🧠 Understanding the Browser, JavaScript Runtime, and Engine
+# 🧠 Full Understanding Before Diving into the Event Loop  
+## 🔍 Understanding the Browser, JavaScript Engine, and JavaScript Runtime
 
-## 1. Browser
-This is the application (like Chrome, Firefox, Safari) where your web page runs.
+Read and learn by looking at this diagram:
+https://excalidraw.com/#json=IzeJaccBgJft9Rk4_mIOb,2Bj1urjIuJxnARZkDVIpGA
+---
 
-It contains multiple components:
-- HTML parser
-- CSS engine
-- Rendering engine (like Blink/WebKit)
-- JavaScript engine (like V8 in Chrome)
-- JS runtime (includes Web APIs, event loop, etc.)
+## 1. 🌐 **Browser**
+The browser (e.g., Chrome, Firefox, Safari) is the full application that loads and runs web pages. It consists of multiple subsystems:
+
+- **HTML Parser** – Parses your HTML into a DOM tree.
+- **CSS Engine** – Parses stylesheets and computes styles.
+- **Rendering Engine** (e.g., Blink in Chrome) – Paints pixels to the screen.
+- **JavaScript Engine** (e.g., V8) – Parses and runs your JS.
+- **JavaScript Runtime** – Provides the environment in which JS can interact with things like `setTimeout`, `fetch`, the DOM, etc.
+
+✅ The browser provides the **host environment** that powers all this.
 
 ---
 
-## 2. JavaScript Engine
-Responsible for **executing JavaScript code**.
+## 2. ⚙️ **JavaScript Engine**
+This is just the part of the browser responsible for understanding and running **pure JavaScript code**.
 
-- In Chrome, it's called **V8**.
-- It:
-  - Parses JS code
-  - Compiles it (JIT - just-in-time compilation)
-  - Optimizes and runs it
+- **Example**: V8 (Chrome), SpiderMonkey (Firefox)
+- The engine:
+  - Parses your JS into an abstract syntax tree (AST)
+  - Compiles it using **Just-In-Time (JIT)** compilation
+  - Optimizes and executes the bytecode
 
-> It **only understands JavaScript**, not DOM, timers, or fetch.
+❗ It **does NOT** understand browser-specific features like:
+- `setTimeout`
+- DOM (`document.querySelector`)
+- `fetch`
+- Event listeners
 
----
-
-## 3. JavaScript Runtime Environment
-The whole ecosystem that allows JavaScript to work in a browser.
-
-Includes:
-- **JavaScript engine** (e.g. V8)
-- **Web APIs** (e.g. DOM, `fetch`, `setTimeout`)
-- **Callback queue**
-- **Event loop**
-
-> Acts as a bridge between JavaScript (engine) and browser capabilities.
+The engine just knows:
+- Functions, variables, scopes
+- Objects, closures, Promises
+- Control flow, math, logic
 
 ---
 
-## 🔄 How They Communicate (Step-by-Step)
+## 3. 🌍 **JavaScript Runtime Environment**
+The JavaScript runtime environment is crucial for executing JavaScript code within the browser. While the JavaScript engine (like V8) is responsible for parsing and executing the JavaScript code itself, the runtime environment provides all the necessary surrounding infrastructure and APIs that allow JavaScript to interact with the browser and the outside world.
 
-Example code:
+It includes:
+
+| Component                | Role                                      |
+|--------------------------|-------------------------------------------|
+| **JavaScript Engine (V8)** | Runs your JS code                        |
+| **Web APIs**             | Timer (`setTimeout`), `fetch`, DOM, etc. |
+| **Callback Queue**       | Stores callbacks from async tasks         |
+| **Event Loop**           | Coordinates when callbacks are executed   |
+
+So when you run code in a browser, you're running it inside this **JavaScript Runtime**, not just the JS engine.
+
+---
+
+## 🔁 How Everything Works Together
+
+Here’s an example to walk through the entire flow:
 
 ```js
 console.log("1");
+
 setTimeout(() => console.log("2"), 1000);
+
 console.log("3");
 ```
 
-### ➤ Step 1: JS Engine Runs Code
-- Executes `console.log("1")` → prints `1`
-- Encounters `setTimeout()` → **V8 can't handle this directly**
+### ✅ Step-by-step Breakdown:
 
-### ➤ Step 2: Delegate to Web API
-- **Browser handles** `setTimeout`
-- Sets a timer and continues
+1. **Synchronous code starts**  
+   JS engine runs `console.log("1")` → prints `1`
 
-### ➤ Step 3: Continue Synchronous Code
-- Runs `console.log("3")` → prints `3`
+2. **Encounter `setTimeout()`**  
+   - The JS engine says: “I don’t know what `setTimeout` is.”
+   - So it delegates this to the **Web API** in the browser
+   - Browser starts a timer (in parallel, not blocking JS)
 
-### ➤ Step 4: Timer Expires → Callback Queue
-- After 1s, the callback goes to the **callback queue**
+3. **Next sync line runs**  
+   JS engine runs `console.log("3")` → prints `3`
 
-### ➤ Step 5: Event Loop
-- Event loop checks if call stack is empty
-- If yes → pushes the callback to the stack
-- Executes `console.log("2")` → prints `2`
+4. **Timer expires (after ~1000ms)**  
+   Browser moves the callback into the **Callback Queue**
+
+5. **Event Loop kicks in**  
+   - It checks: “Is the JS call stack empty?”
+   - If yes, it pushes the callback into the **call stack**
+
+6. **JS Engine runs the callback**  
+   `console.log("2")` is executed → prints `2`
 
 ---
 
-## 🧩 Summary Diagram (Text Version)
+## 🧩 Text-Based Summary Diagram
 
 ```
 Browser
@@ -79,19 +106,19 @@ Browser
 ├── JavaScript Runtime
 │   ├── JavaScript Engine (V8)
 │   ├── Web APIs (DOM, timers, fetch, etc.)
-│   ├── Callback Queue
+│   ├── Callback Queue (aka Task Queue)
 │   └── Event Loop
 │
-└── Rendering Engine (handles HTML/CSS/UI painting)
+└── Rendering Engine (HTML/CSS/UI updates)
 ```
 
 ---
 
-## 💬 In Simple Words:
-- **Browser**: The container where everything happens.
-- **JS Engine (V8)**: Just executes JS code.
-- **Runtime**: Adds the rest (timers, fetch, DOM, event loop).
-- **Communication**: JS Engine offloads tasks (like `setTimeout`, DOM manipulation) to Web APIs → they respond → Event loop queues callbacks → JS Engine executes.
+## 💡 In Simple Words:
+- **JS Engine (V8)**: Executes JS line-by-line but doesn’t know anything about the browser.
+- **Web APIs**: Provided by the browser to interact with the outside world (DOM, timers, etc).
+- **Runtime**: Combines the engine + Web APIs + Event Loop to form the full environment JS runs in.
+- **Event Loop**: Manages when async callbacks get pushed into the engine for execution.
 
 ---
 
@@ -208,3 +235,5 @@ console.log("4");
 | Callback Queue   | Queues macro-tasks to be run after stack is empty                           |
 | Microtask Queue  | Queues promises, runs before macro-tasks                                    |
 | Event Loop       | The traffic controller — moves tasks from queues to call stack              |
+
+Event loop visualized: https://www.jsv9000.app/
