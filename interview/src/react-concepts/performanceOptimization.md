@@ -122,3 +122,135 @@ const Child = React.memo(({ onClick }) => {
 ---
 
 Let me know if you'd like to add sections on performance profiling or compare with Redux, Zustand, or Context API.
+
+
+# 🧠 Event Delegation in JavaScript and React
+
+## 📌 What is Event Delegation?
+
+**Event delegation** is a technique where you attach a **single event listener to a parent element**, and that listener handles events triggered by its child elements using **event bubbling**.
+
+---
+
+## 🔁 How Does It Work?
+
+In the browser, events like `click`, `keydown`, etc., **bubble up** the DOM tree. That means if an event happens on a child, it travels up to its ancestors. Event delegation leverages this by placing a listener on an ancestor.
+
+---
+
+## 🧩 Example in Vanilla JavaScript
+
+### ❌ Without Event Delegation
+
+```js
+document.querySelectorAll('#myList li').forEach((li) => {
+  li.addEventListener('click', () => console.log('Clicked', li));
+});
+```
+
+Creates N event listeners (one per item).
+
+---
+
+### ✅ With Event Delegation
+
+```html
+<ul id="myList">
+  <li data-id="1">Item 1</li>
+  <li data-id="2">Item 2</li>
+  <li data-id="3">Item 3</li>
+</ul>
+```
+
+```js
+document.getElementById('myList').addEventListener('click', (event) => {
+  const clickedItem = event.target;
+  if (clickedItem.tagName === 'LI') {
+    console.log('Clicked:', clickedItem.dataset.id);
+  }
+});
+```
+
+🔹 Only **1 listener** is used here — even if new `<li>`s are added later.
+
+---
+
+## ⚡️ Benefits
+
+- Better **performance** with many elements
+- Handles **dynamically added elements** seamlessly
+- **Cleaner codebase**
+
+---
+
+## ⚠️ Caveats
+
+- Not all events bubble (e.g., `blur`, `focus`, `scroll` do not)
+- Be careful with `event.target` — it might not always be the element you expect
+
+---
+
+# ⚛️ Event Delegation in React
+
+React uses **Synthetic Events** and already optimizes event handling by **delegating events to a root container** behind the scenes.
+
+---
+
+## ✅ React Example: Manual Delegation
+
+```jsx
+function ItemList({ items }) {
+  const handleClick = (event) => {
+    const { dataset } = event.target;
+    if (dataset && dataset.id) {
+      console.log("Clicked item ID:", dataset.id);
+    }
+  };
+
+  return (
+    <ul onClick={handleClick}>
+      {items.map((item) => (
+        <li key={item.id} data-id={item.id}>
+          {item.name}
+        </li>
+      ))}
+    </ul>
+  );
+}
+```
+
+### 🔍 What's Happening?
+- One `onClick` listener on `<ul>` handles clicks from all `<li>` elements.
+- `data-id` is used to uniquely identify the item.
+
+---
+
+## 👥 Comparison: Individual Listeners
+
+```jsx
+{items.map((item) => (
+  <li key={item.id} onClick={() => handleClick(item.id)}>
+    {item.name}
+  </li>
+))}
+```
+
+Creates **N different functions** and listeners — fine for small lists, but may impact performance at scale.
+
+---
+
+## ✅ When to Use Delegation in React
+
+Use manual delegation when:
+- You have **many** elements (e.g., 1000+)
+- Elements are **added/removed dynamically**
+- You're optimizing for **performance/memory**
+
+Otherwise, React’s default event model is efficient enough.
+
+---
+
+## 🧠 Final Thought
+
+Event delegation is a classic web dev trick that's still relevant — especially when performance and scalability matter.
+

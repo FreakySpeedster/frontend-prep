@@ -18,7 +18,7 @@ Array.prototype.myFilter = function (callbackFn) {
     for(let i=0; i<array.length; i++) {
         let result = callbackFn(array[i], i, array);
         if(result) {
-            filteredArray.push(result);
+            filteredArray.push(array[i]);
         }
     }
     return filteredArray;
