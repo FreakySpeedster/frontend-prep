@@ -5,7 +5,7 @@
 **Answer:**
 
 - **Client-Side Rendering (CSR):**  
-  The browser downloads a minimal HTML file and JavaScript executes to render content dynamically.  
+  The browser downloads a minimal HTML file and JavaScript executes to render content dynamically.
   **Example:** React SPAs.
 
 - **Server-Side Rendering (SSR):**  
@@ -162,8 +162,8 @@ Micro Frontends break a large frontend application into smaller, independently d
 
 **Answer:**
 
-- **Debouncing:** Ensures a function executes only after a delay since the last trigger. Used in search inputs.
-- **Throttling:** Ensures a function executes at most once in a fixed interval. Used in scroll events.
+- **Debouncing:** Ensures a **function** executes only after a delay since the last trigger. Used in search inputs.
+- **Throttling:** Ensures a **function** executes at most once in a fixed interval. Used in scroll events.
 
 ### Follow-up Questions:
 

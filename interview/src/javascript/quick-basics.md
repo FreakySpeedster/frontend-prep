@@ -36,6 +36,8 @@ console.log(fn()); // 10
 ### Event Loop (High-level)
 - JS is single-threaded
 - Handles async tasks using:
+  - CallStack
+  - WebAPIs
   - Callback queue (`setTimeout`, `setInterval`)
   - Microtask queue (Promises, `async/await`)
 
