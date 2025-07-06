@@ -94,6 +94,9 @@ const TicketCard = React.memo(({ ticket, onAssign }) => {
 });
 ```
 
+Event delegation is a powerful pattern that makes React components more efficient and maintainable!
+```
+
 ## How useCallback and React.memo complement each other
 ``` jsx
 const Parent = () => {
@@ -254,3 +257,160 @@ Otherwise, React’s default event model is efficient enough.
 
 Event delegation is a classic web dev trick that's still relevant — especially when performance and scalability matter.
 
+
+## Example of Event Delegation with TODO List
+## 🎯 Event Delegation in React
+
+Event delegation is a pattern where you handle events at a parent level instead of attaching event handlers to each child element. This is especially useful for dynamic lists.
+
+### Simple Example: Todo List with Event Delegation
+
+```jsx
+import React, { useState } from 'react';
+
+function TodoList() {
+  const [todos, setTodos] = useState([
+    { id: 1, text: 'Learn React', completed: false },
+    { id: 2, text: 'Build a project', completed: false },
+    { id: 3, text: 'Deploy to production', completed: false }
+  ]);
+
+  // Event delegation - handle all todo actions in one place
+  const handleTodoAction = (event) => {
+    const todoId = parseInt(event.target.dataset.todoId);
+    const action = event.target.dataset.action;
+
+    if (!todoId || !action) return; // Not a todo action
+
+    setTodos(prevTodos => 
+      prevTodos.map(todo => {
+        if (todo.id === todoId) {
+          switch (action) {
+            case 'toggle':
+              return { ...todo, completed: !todo.completed };
+            case 'delete':
+              return null; // Will be filtered out
+            default:
+              return todo;
+          }
+        }
+        return todo;
+      }).filter(Boolean) // Remove null items (deleted todos)
+    );
+  };
+
+  return (
+    <div className="todo-list" onClick={handleTodoAction}>
+      <h2>My Todos</h2>
+      {todos.map(todo => (
+        <div key={todo.id} className="todo-item">
+          <span 
+            className={todo.completed ? 'completed' : ''}
+            data-todo-id={todo.id}
+            data-action="toggle"
+          >
+            {todo.text}
+          </span>
+          <button 
+            data-todo-id={todo.id}
+            data-action="delete"
+          >
+            Delete
+          </button>
+        </div>
+      ))}
+    </div>
+  );
+}
+```
+
+### How Event Delegation Works:
+
+#### 1. **Single Event Handler**
+```jsx
+// Instead of multiple handlers:
+// <span onClick={() => toggleTodo(todo.id)}>
+// <button onClick={() => deleteTodo(todo.id)}>
+
+// We have ONE handler:
+<div onClick={handleTodoAction}>
+```
+
+#### 2. **Data Attributes for Identification**
+```jsx
+// Each interactive element has data attributes:
+<span data-todo-id={todo.id} data-action="toggle">
+<button data-todo-id={todo.id} data-action="delete">
+```
+
+#### 3. **Event Target Analysis**
+```jsx
+const handleTodoAction = (event) => {
+  const todoId = parseInt(event.target.dataset.todoId);
+  const action = event.target.dataset.action;
+  
+  // Determine what action to take based on the clicked element
+}
+```
+
+### Benefits:
+
+#### 1. **Performance**
+- Only one event listener instead of many
+- Better for large lists
+- Less memory usage
+
+#### 2. **Dynamic Content**
+- Works with items added/removed dynamically
+- No need to re-attach event listeners
+
+#### 3. **Cleaner Code**
+- Centralized event handling logic
+- Easier to maintain and debug
+
+### Alternative: Traditional Approach (for comparison)
+
+```jsx
+// Without event delegation - multiple handlers
+function TodoListTraditional() {
+  const [todos, setTodos] = useState([...]);
+
+  const toggleTodo = (id) => {
+    setTodos(prev => prev.map(todo => 
+      todo.id === id ? { ...todo, completed: !todo.completed } : todo
+    ));
+  };
+
+  const deleteTodo = (id) => {
+    setTodos(prev => prev.filter(todo => todo.id !== id));
+  };
+
+  return (
+    <div>
+      {todos.map(todo => (
+        <div key={todo.id}>
+          <span onClick={() => toggleTodo(todo.id)}>
+            {todo.text}
+          </span>
+          <button onClick={() => deleteTodo(todo.id)}>
+            Delete
+          </button>
+        </div>
+      ))}
+    </div>
+  );
+}
+```
+
+### When to Use Event Delegation:
+
+✅ **Use when:**
+- Large lists (100+ items)
+- Dynamic content (items added/removed frequently)
+- Similar actions across multiple elements
+- Performance is critical
+
+❌ **Avoid when:**
+- Small, static lists
+- Complex, unique actions per item
+- Need for specific event handling per element

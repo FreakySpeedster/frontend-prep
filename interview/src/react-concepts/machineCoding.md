@@ -5,9 +5,11 @@ Here are 10 React.js LLD questions you should definitely prepare for to make a s
 
 𝟮. 𝗛𝗼𝘄 𝘄𝗼𝘂𝗹𝗱 𝘆𝗼𝘂 𝗯𝘂𝗶𝗹𝗱 𝗮 𝗻𝗲𝘀𝘁𝗲𝗱 𝗰𝗼𝗺𝗺𝗲𝗻𝘁 𝘁𝗵𝗿𝗲𝗮𝗱 𝗹𝗶𝗸𝗲 𝗥𝗲𝗱𝗱𝗶𝘁?
  → How will you structure recursive components and optimize performance?
+ "I’d structure a recursive <Comment /> component that renders each comment and its children. To optimize performance, I’d memoize each comment with React.memo(), use local state for collapse/expand to avoid unnecessary rerenders, and ensure stable keys. For very large threads, I’d consider virtualization or pagination of comment trees."
 
 𝟯. 𝗛𝗼𝘄 𝘄𝗼𝘂𝗹𝗱 𝘆𝗼𝘂 𝗱𝗲𝘀𝗶𝗴𝗻 𝗮 𝗿𝗲𝘀𝗽𝗼𝗻𝘀𝗶𝘃𝗲 𝘀𝗶𝗱𝗲𝗯𝗮𝗿 𝗻𝗮𝘃𝗶𝗴𝗮𝘁𝗶𝗼𝗻?
  → What’s your approach for mobile vs desktop, toggling submenus, and linking routes?
+ "I’d design a sidebar that’s fixed on desktop but off-canvas on mobile, toggled via a hamburger menu. I’d use local state for submenus to keep each section isolated and performant. Routing would be handled by <NavLink> so I get active link styling out of the box. For accessibility, I’d use ARIA attributes and ensure keyboard navigation works. Finally, I’d add transitions for smooth opening and closing."
 
 𝟰. 𝗛𝗼𝘄 𝘄𝗼𝘂𝗹𝗱 𝘆𝗼𝘂 𝗶𝗺𝗽𝗹𝗲𝗺𝗲𝗻𝘁 𝗮 𝘁𝗮𝗯 𝗰𝗼𝗺𝗽𝗼𝗻𝗲𝗻𝘁 𝘄𝗶𝘁𝗵 𝗮𝗻𝗶𝗺𝗮𝘁𝗶𝗼𝗻𝘀?
  → How do you manage tab state, dynamic rendering, and apply smooth transitions?
